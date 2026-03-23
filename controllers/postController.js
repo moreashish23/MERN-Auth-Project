@@ -1,6 +1,7 @@
 const { createPostSchema } = require("../middlewares/validator");
 const Post = require("../models/postsModel");
 
+
 exports.getPosts = async (req, res) => {
   try {
     const { page } = req.query;
@@ -9,7 +10,7 @@ exports.getPosts = async (req, res) => {
     let pageNum = page && page > 1 ? page - 1 : 0;
 
     const result = await Post.find()
-      .sort({ createdAt: -1 }) 
+      .sort({ createdAt: -1 })
       .skip(pageNum * postsPerPage)
       .limit(postsPerPage)
       .populate({
@@ -24,9 +25,10 @@ exports.getPosts = async (req, res) => {
     });
   } catch (error) {
     console.error("Get Posts Error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 exports.singlePost = async (req, res) => {
   try {
@@ -52,23 +54,28 @@ exports.singlePost = async (req, res) => {
     });
   } catch (error) {
     console.error("Single Post Error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
+
 exports.createPost = async (req, res) => {
   try {
-    if (!req.user) {
+    console.log("REQ.USER:", req.user); // 🔥 DEBUG
+
+    if (!req.user || !req.user.userId) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized - no user",
+        message: "Unauthorized - invalid token",
       });
     }
 
     const { title, description } = req.body;
-    const { userId } = req.user;
+    const userId = req.user.userId;
 
-    // ✅ FIXED VALIDATION
+    console.log("BODY:", req.body);
+    console.log("USER ID:", userId);
+
     const { error } = createPostSchema.validate({
       title,
       description,
@@ -89,29 +96,34 @@ exports.createPost = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "created",
+      message: "Post created",
       data: result,
     });
+
   } catch (error) {
     console.error("Create Post Error:", error);
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      success: false,
+      message: error.message, 
+    });
   }
 };
 
+
 exports.updatePost = async (req, res) => {
   try {
-    if (!req.user) {
+    if (!req.user || !req.user.userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const { _id } = req.query;
     const { title, description } = req.body;
-    const { userId } = req.user;
+    const userId = req.user.userId;
 
     const { error } = createPostSchema.validate({
       title,
       description,
-      userId,
     });
 
     if (error) {
@@ -148,19 +160,19 @@ exports.updatePost = async (req, res) => {
     });
   } catch (error) {
     console.error("Update Post Error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 
 exports.deletePost = async (req, res) => {
   try {
-    if (!req.user) {
+    if (!req.user || !req.user.userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const { _id } = req.query;
-    const { userId } = req.user;
+    const userId = req.user.userId;
 
     const existingPost = await Post.findById(_id);
     if (!existingPost) {
@@ -185,6 +197,6 @@ exports.deletePost = async (req, res) => {
     });
   } catch (error) {
     console.error("Delete Post Error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: error.message });
   }
 };
