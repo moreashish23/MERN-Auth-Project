@@ -114,7 +114,7 @@ exports.deletePost = async(req, res) => {
                     .json({success: false, message: "Unauthorized!"});
         }
 
-        Post.deleteOne({_id})
+        await Post.findByIdAndDelete(_id);
         res.status(200).json({success:true, message: 'Deleted!'});
 
     } catch (error) {
