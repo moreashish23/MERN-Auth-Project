@@ -11,7 +11,7 @@ const postRouter = require("./routers/postRouter")
 const app = express();
 
 const allowedOrigins = [
-  process.env.LOCAL_CLIENT,
+  "http://localhost:5173",
   process.env.CLIENT_URL.replace(/\/$/, ""), 
 ];
 
