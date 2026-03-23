@@ -61,7 +61,7 @@ exports.singlePost = async (req, res) => {
 
 exports.createPost = async (req, res) => {
   try {
-    console.log("REQ.USER:", req.user); // 🔥 DEBUG
+    console.log("REQ.USER:", req.user);
 
     if (!req.user || !req.user.userId) {
       return res.status(401).json({

@@ -98,7 +98,7 @@ exports.acceptFPCodeSchema = Joi.object({
 
 exports.createPostSchema = Joi.object({
   title: Joi.string()
-    .min(1)
+    .min(5) 
     .max(100)
     .required()
     .messages({
@@ -108,7 +108,7 @@ exports.createPostSchema = Joi.object({
     }),
 
   description: Joi.string()
-    .min(5)
+    .min(10)
     .max(1000)
     .required()
     .messages({
