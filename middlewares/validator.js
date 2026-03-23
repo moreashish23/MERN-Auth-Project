@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+
 exports.signupSchema = Joi.object({
   email: Joi.string()
     .min(6)
@@ -94,6 +95,7 @@ exports.acceptFPCodeSchema = Joi.object({
     ),
 });
 
+
 exports.createPostSchema = Joi.object({
   title: Joi.string()
     .min(5)
@@ -114,6 +116,4 @@ exports.createPostSchema = Joi.object({
       "string.min": "Description must be at least 10 characters",
       "string.max": "Description cannot exceed 1000 characters",
     }),
-
-  userId: Joi.string().required(),
 });
