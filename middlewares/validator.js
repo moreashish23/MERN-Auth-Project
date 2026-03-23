@@ -98,12 +98,12 @@ exports.acceptFPCodeSchema = Joi.object({
 
 exports.createPostSchema = Joi.object({
   title: Joi.string()
-    .min(5) 
+    .min(2) 
     .max(100)
     .required()
     .messages({
       "string.empty": "Title is required",
-      "string.min": "Title must be at least 5 characters",
+      "string.min": "Title must be at least 2 characters",
       "string.max": "Title cannot exceed 100 characters",
     }),
 
