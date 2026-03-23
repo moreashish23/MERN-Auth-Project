@@ -68,10 +68,10 @@ exports.createPost = async (req, res) => {
     const { title, description } = req.body;
     const { userId } = req.user;
 
+    // ✅ FIXED VALIDATION
     const { error } = createPostSchema.validate({
       title,
       description,
-      userId,
     });
 
     if (error) {
