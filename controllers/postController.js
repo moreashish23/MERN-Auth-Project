@@ -114,7 +114,7 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
   try {
     if (!req.user || !req.user.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "You can only edit or delete your own posts." });
     }
 
     const { _id } = req.query;
@@ -168,7 +168,7 @@ exports.updatePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     if (!req.user || !req.user.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "You can only edit or delete your own posts." });
     }
 
     const { _id } = req.query;
